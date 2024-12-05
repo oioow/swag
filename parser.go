@@ -1344,13 +1344,19 @@ func (parser *Parser) ParseDefinition(typeSpecDef *TypeSpecDef) (*Schema, error)
 		var varnames []string
 		var enumComments = make(map[string]string)
 		var enumDescriptions = make([]string, 0, len(typeSpecDef.Enums))
+		var enumDatas []*EnumValue2
 		for _, value := range typeSpecDef.Enums {
+			var enumData EnumValue2
 			definition.Enum = append(definition.Enum, value.Value)
+			enumData.Value = value.Value
 			varnames = append(varnames, value.key)
+			enumData.Name = value.key
 			if len(value.Comment) > 0 {
 				enumComments[value.key] = value.Comment
 				enumDescriptions = append(enumDescriptions, value.Comment)
+				enumData.description = value.Comment
 			}
+			enumDatas = append(enumDatas, &enumData)
 		}
 		if definition.Extensions == nil {
 			definition.Extensions = make(spec.Extensions)
@@ -1360,6 +1366,7 @@ func (parser *Parser) ParseDefinition(typeSpecDef *TypeSpecDef) (*Schema, error)
 			definition.Extensions[enumCommentsExtension] = enumComments
 			definition.Extensions[enumDescriptionsExtension] = enumDescriptions
 		}
+		definition.Extensions[enumDataExtension] = enumDatas
 	}
 
 	schemaName := typeName
