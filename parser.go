@@ -1344,6 +1344,7 @@ func (parser *Parser) ParseDefinition(typeSpecDef *TypeSpecDef) (*Schema, error)
 		var varnames []string
 		var enumComments = make(map[string]string)
 		var enumDescriptions = make([]string, 0, len(typeSpecDef.Enums))
+		
 		for _, value := range typeSpecDef.Enums {
 			definition.Enum = append(definition.Enum, value.Value)
 			varnames = append(varnames, value.key)
